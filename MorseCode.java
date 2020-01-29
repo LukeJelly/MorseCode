@@ -1,9 +1,10 @@
 import java.util.*;
 
 public class MorseCode {
-    static String[] MorseAlpha = { ".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", ".---", "-.-", ".-..",
-            "--", "-.", "---", ".--.", "--.-", ".-.", "...", "-", "..-", "...-", ".--", "-..-", "-.--", "--.." };
-    static String[] MorseDigit = { "-----", ".----", "..--", "...--", "....-", ".....", "-....", "--...", "--..",
+    static String[] MorseLetters = { ".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", ".---", "-.-",
+            ".-..", "--", "-.", "---", ".--.", "--.-", ".-.", "...", "-", "..-", "...-", ".--", "-..-", "-.--",
+            "--.." };
+    static String[] MorseDigits = { "-----", ".----", "..--", "...--", "....-", ".....", "-....", "--...", "--..",
             "---." };
 
     // ************************FROM TEXT TO MORSE*******************************/
@@ -38,21 +39,21 @@ public class MorseCode {
         // Check if it is a letter
         if (Character.isLetter(c)) {
             /*
-             * If the char is a letter, subtract 'A' that char's value
-             * that int value is the index of that item in the list
+             * If the char is a letter, subtract 'A' that char's value that int value is the
+             * index of that item in the list
              */
             int index = (int) (c - 'A');
-            return MorseAlpha[index];
+            return MorseLetters[index];
         } else if (c == ' ') {
-            //Special case for space.
+            // Special case for space.
             return "/";
         } else {
-            /*We know to get to this point the char is a digit.
-             * Subtract '0' from the char to get the index in the list of 
-             *that char
+            /*
+             * We know to get to this point the char is a digit. Subtract '0' from the char
+             * to get the index in the list of that char
              */
-            int index = (int) (c - 48);
-            return MorseDigit[index];
+            int index = (int) (c - '0');
+            return MorseDigits[index];
         }
     }
 
@@ -74,15 +75,15 @@ public class MorseCode {
      * @return a String of Text in all caps that represents the Morse Code.
      */
     public static String convertMorseToText(String s) {
-        String output = "";
+        StringBuffer output = new StringBuffer();
         Scanner processing = new Scanner(s);
         while (processing.hasNext()) {
             // Grab the next letter
             String letter = processing.next();
-            // Instantiate so I can use later.
-            Character addToOutput;
+            //Holds the char we are going to add to the output string.
+            char addToOutput;
             /*
-             * Check if it is a space. While this is rare if it is true it saves me alot of
+             * Check if it is a space. While this is rare if it is true it saves me a lot of
              * time because then I don't have to call all the other methods
              */
             if (letter.equals("/")) {
@@ -101,15 +102,15 @@ public class MorseCode {
                 int index = convertToText(letter);
                 if (index < 0) {
                     index *= -1;
-                    addToOutput = (char) (48 + index);
+                    addToOutput = (char) ('0' + index);
                 } else {
-                    addToOutput = (char) (65 + index);
+                    addToOutput = (char) ('A' + index);
                 }
             }
-            output += Character.toString(addToOutput);
+            output.append(addToOutput);
         }
         processing.close();
-        return output;
+        return output.toString();
     }
 
     /**
@@ -122,16 +123,27 @@ public class MorseCode {
      *                                  current data.
      */
     private static int convertToText(String letter) {
-        for (int i = 0; i < MorseAlpha.length; i++) {
-            if (MorseAlpha[i].equals(letter)) {
+        for (int i = 0; i < MorseLetters.length; i++) {
+            /*
+             * Look through all of the Strings in MorseLetter array to see if they are the
+             * same as the morse letter. If so return that index.
+             */
+            if (MorseLetters[i].equals(letter)) {
                 return i;
             }
-            if (i < MorseDigit.length) {
-                if (MorseDigit[i].equals(letter)) {
+            // Check if our index is a possible index for MorseDigits array.
+            if (i < MorseDigits.length) {
+                /*
+                 * If it is look through all of the Strings in MorseDigits array
+                 * to see if they are the same as the morse letter. 
+                 * If so return that index * -1 to signify that it is a Digit.
+                 */
+                if (MorseDigits[i].equals(letter)) {
                     return i * -1;
                 }
             }
         }
+        //The given code does not exist in either array, throw error.
         throw new IllegalArgumentException("\"" + letter + "\" Can not be converted to morse code");
     }
 
