@@ -1,6 +1,15 @@
 import java.util.*;
 
+/**
+ * Class that takes in a String of text and converts it to Morse Code, or takes
+ * in a String of Morse Code and converts it to text.
+ * 
+ * @author Luke.Kelly
+ * @version 1.0
+ */
 public class MorseCode {
+    //For both of these arrays index 0 = A or 0.  So index 26 = z in Morse Code
+    //and index 9 = 9 in Morse Code
     static String[] MorseLetters = { ".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", ".---", "-.-",
             ".-..", "--", "-.", "---", ".--.", "--.-", ".-.", "...", "-", "..-", "...-", ".--", "-..-", "-.--",
             "--.." };
@@ -39,8 +48,8 @@ public class MorseCode {
         // Check if it is a letter
         if (Character.isLetter(c)) {
             /*
-             * If the char is a letter, subtract 'A' that char's value that int value is the
-             * index of that item in the list
+             * If the char is a letter, subtract 'A' from it to find the index, of
+             * that char in the array.
              */
             int index = (int) (c - 'A');
             return MorseLetters[index];
@@ -88,7 +97,8 @@ public class MorseCode {
              */
             if (letter.equals("/")) {
                 addToOutput = ' ';
-            } else {// If not a space
+            // If not a space
+            } else {
                 // Find the index in the array
                 /*
                  * My Arrays are setup in ascending order just like they are on the unicode
